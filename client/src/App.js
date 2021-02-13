@@ -1,12 +1,15 @@
-import Main from "./components/main";
-import Analyze from "./components/analyze";
+import Main from "./components/Main";
+import Analyze from "./components/Analyze";
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import Profile from "./components/Profile";
 
 // "/" --> Main
 // "/analyze" --> Analyze
 function App() {
   return (
-    <Main/>
+    <div>
+        <Profile />
+    </div>
   );
 }
 
