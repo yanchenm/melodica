@@ -1,5 +1,6 @@
 import React from 'react';
 import * as qs from "query-string";
+import '../styles/Main.css';
 
 function Main() {
 
@@ -16,16 +17,14 @@ function Main() {
         return url + qs.stringify(params);
     }
     return (
-        <div className="App">
-            <header className="App-header">
+        <div className="app">
+            <header className="app-header">
                 <p>
                 Edit <code>src/App.js</code> and save to reload.
                 </p>
-                <button> 
-                    <a href={getQueryString()}>
-                        CONNECT WITH SPOTIFY 
-                    </a>
-                    </button>
+                <a href={getQueryString()} id="login-button">
+                    CONNECT WITH SPOTIFY 
+                </a>
             </header>
         </div>
     )
