@@ -15,6 +15,8 @@ const Main = () => {
                 state: {code: params.get("code")}
             }} />
         }
+
+        document.body.style.backgroundColor = "#181818";
     }, [])
 
     const getQueryString = () => {
@@ -26,6 +28,7 @@ const Main = () => {
             "redirect_uri": "http://localhost:3000/login",
             "scope": "user-read-email user-read-recently-played",
         };
+
         return url + qs.stringify(params);
     }
 

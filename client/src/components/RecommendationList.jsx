@@ -7,8 +7,8 @@ const getRecommendationList = (recs) => {
             <li key={rec.title} className="song"> 
                 <img className="song-cover" src={rec.img}></img>
                 <div className="song-info">
-                    <p className="song-title">{rec.title}</p>
-                    <p className="song-artist">{rec.artist}</p>
+                    <p className="song-title" style={{ color: "black"}}>{rec.title}</p>
+                    <p className="song-artist" style={{ color: "black"}}>{rec.artist}</p>
                 </div>
             </li>
         );
