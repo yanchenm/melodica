@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/yanchenm/musemoods/spotify"
 )
@@ -84,12 +85,18 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Name:     "access",
 		Value:    authResponse.AccessToken,
 		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		Secure:   true,
+		MaxAge:   3600,
 	})
 
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refresh",
 		Value:    authResponse.RefreshToken,
 		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+		Secure:   true,
+		Expires:  time.Now().Add(14 * 24 * time.Hour),
 	})
 
 	w.WriteHeader(http.StatusOK)
