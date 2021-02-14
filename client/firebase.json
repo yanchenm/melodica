@@ -10,6 +10,18 @@
       {
         "source": "**",
         "destination": "/index.html"
+      },
+      {
+        "source": "/api/login",
+        "function": "Login"
+      },
+      {
+        "source": "/api/user",
+        "function": "User"
+      },
+      {
+        "source": "/api/recents",
+        "function": "GetRecentlyPlayed"
       }
     ]
   }
