@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        function: [Login, User, GetRecentlyPlayed]
+        function: [Login, User, GetRecentlyPlayed, GetRecommended]
 
     steps:
       - uses: actions/checkout@v2

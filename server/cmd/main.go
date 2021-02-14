@@ -25,6 +25,9 @@ func main() {
 	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/GetRecentlyPlayed", server.GetRecentlyPlayed); err != nil {
 		log.Fatalf("/getsongs: %v\n", err)
 	}
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/GetRecommended", server.GetRecentlyPlayed); err != nil {
+		log.Fatalf("/getrecommended: %v\n", err)
+	}
 
 	port := "8080"
 	if err := funcframework.Start(port); err != nil {

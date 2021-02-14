@@ -20,6 +20,10 @@
         "function": "GetRecentlyPlayed"
       },
       {
+        "source": "/api/recommended",
+        "function": "GetRecommended"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
