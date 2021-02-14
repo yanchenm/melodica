@@ -1,7 +1,9 @@
-import {useEffect} from "react";
-import * as qs from "query-string";
 import '../styles/Main.css';
+
+import * as qs from "query-string";
+
 import { Redirect } from "react-router-dom";
+import {useEffect} from "react";
 
 const Main = () => {
 
@@ -25,7 +27,7 @@ const Main = () => {
         const params = {
             "client_id": process.env.REACT_APP_SPOTIFY_CLIENT_ID,
             "response_type": "code",
-            "redirect_uri": "http://localhost:3000/login",
+            "redirect_uri": "https://melodica.tech/api/login",
             "scope": "user-read-email user-read-recently-played",
         };
 
