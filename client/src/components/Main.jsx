@@ -3,7 +3,6 @@ import * as qs from "query-string";
 import '../styles/Main.css';
 
 function Main() {
-
     const getQueryString = () => {
         const url = "https://accounts.spotify.com/authorize?";
 
