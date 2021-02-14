@@ -9,6 +9,8 @@ on:
     paths:
       - client/**
 
+  workflow_dispatch:
+
 defaults:
   run:
     working-directory: client
