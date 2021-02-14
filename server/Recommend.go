@@ -80,8 +80,9 @@ func GetRecommended(w http.ResponseWriter, r *http.Request) {
 	}
 
 	emotion, ok := r.URL.Query()["emotion"]
-	if ok != false {
+	if !ok {
 		http.Error(w, "No emotion query parameter", http.StatusInternalServerError)
+		return
 	}
 	queryParams := req.URL.Query()
 	queryParams.Add("seed_genres", strings.Join(emotion[:], ","))

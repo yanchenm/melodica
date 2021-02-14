@@ -1,9 +1,15 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
+	"os"
+	"strings"
+
+	"cloud.google.com/go/firestore"
 
 	"github.com/yanchenm/musemoods/spotify"
 )
@@ -11,11 +17,28 @@ import (
 type UserResponse struct {
 	Email string `json:"email"`
 	Name  string `json:"name"`
+	New   bool   `json:"new"`
 }
 
 type SpotifyUser struct {
 	Email string `json:"email"`
 	Name  string `json:"display_name"`
+}
+
+const (
+	UsersCollection = "users"
+)
+
+var fsClient *firestore.Client
+
+func init() {
+	// Pre-declared to avoid shadowing client
+	var err error
+
+	fsClient, err = firestore.NewClient(context.Background(), os.Getenv("GCP_PROJECT"))
+	if err != nil {
+		log.Fatalf("firestore new client: %v\n", err)
+	}
 }
 
 func User(w http.ResponseWriter, r *http.Request) {
@@ -88,8 +111,37 @@ func User(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if user has used service before
+	var userExists bool
+	_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Get(r.Context())
+	if err != nil {
+		// Find out if error is because user doesn't exist
+		s := err.Error()
+		if strings.Contains(s, "code = NotFound") {
+			userExists = false
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		userExists = true
+	}
+
+	// Create user if not exists
+	if !userExists {
+		_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Set(r.Context(), spotifyUser)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	w.WriteHeader(http.StatusOK)
-	userResponse := UserResponse{spotifyUser.Email, spotifyUser.Name}
+	userResponse := UserResponse{
+		Email: spotifyUser.Email,
+		Name:  spotifyUser.Name,
+		New:   !userExists,
+	}
 	if err = json.NewEncoder(w).Encode(&userResponse); err != nil {
 		panic(err)
 	}
