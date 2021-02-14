@@ -27,7 +27,7 @@ const Main = () => {
         const params = {
             "client_id": process.env.REACT_APP_SPOTIFY_CLIENT_ID,
             "response_type": "code",
-            "redirect_uri": "https://melodica.tech/api/login",
+            "redirect_uri": "https://melodica.tech/login",
             "scope": "user-read-email user-read-recently-played",
         };
 
