@@ -29,7 +29,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-          source_dir: "./server"
+          
 
       - name: deploy Functions
         uses: google-github-actions/deploy-cloud-functions@main
@@ -37,4 +37,4 @@ jobs:
           name: ${{ matrix.function }}
           runtime: go113
           env_vars: SPOTIFY_CLIENT_ID=${{secrets.SPOTIFY_CLIENT_ID}}, SPOTIFY_CLIENT_SECRET=${{secrets.SPOTIFY_CLIENT_SECRET}}
-
+          source_dir: "./server"

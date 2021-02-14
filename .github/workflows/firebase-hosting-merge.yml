@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm install && npm run build
+        env:
+          REACT_APP_SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+          REACT_APP_SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -30,5 +34,4 @@ jobs:
           entrypoint: "./client"
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          REACT_APP_SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
-          REACT_APP_SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+          
