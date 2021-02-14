@@ -11,11 +11,11 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
 	if err := godotenv.Load("../.env.yaml"); err != nil {
 		log.Fatalf("couldn't read env: %v\n", err)
 	}
 
+	ctx := context.Background()
 	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/login", server.Login); err != nil {
 		log.Fatalf("/login: %v\n", err)
 	}
