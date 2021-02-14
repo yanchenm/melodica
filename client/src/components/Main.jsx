@@ -1,7 +1,21 @@
+import {useEffect} from "react";
 import * as qs from "query-string";
 import '../styles/Main.css';
+import { Redirect } from "react-router-dom";
 
 const Main = () => {
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("code")) {
+            console.log(params.get("code"));
+            return <Redirect to={{
+                pathname: "/analyze",
+                state: {code: params.get("code")}
+            }} />
+        }
+    }, [])
 
     const getQueryString = () => {
         const url = "https://accounts.spotify.com/authorize?";
@@ -9,11 +23,9 @@ const Main = () => {
         const params = {
             "client_id": process.env.REACT_APP_SPOTIFY_CLIENT_ID,
             "response_type": "code",
-            "redirect_uri": "http://localhost:3000/analyze",
+            "redirect_uri": "http://localhost:3000/login",
             "scope": "user-read-email user-read-recently-played",
         };
-
-        console.log(qs.stringify(params));
         return url + qs.stringify(params);
     }
 
