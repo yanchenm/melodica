@@ -7,9 +7,15 @@
     align-items: center;
 }
 
+#mood-text-container {
+    display: flex;
+    flex-direction: column;
+}
+
 #mood-intro {
     font-size: 60px;
     padding-bottom: 50px;
+    font-weight: 600;
 }
 
 #mood-prompt {
@@ -32,14 +38,39 @@ select {
 #submit-button {
     background-color: var(--main-green);
     border: none;
-    margin: 60px 0;
+    margin: 60px 0 10px 0;
     padding: 17px 35px;
     border-radius: 30px;
     text-decoration: none;
+    letter-spacing: 1px;
     font-weight: 700;
+    font-size: 15px;
     transition: .3s;
 }
 
 #submit-button:hover {
     background-color: var(--main-green-hover);
+}
+
+#desired-mood {
+    text-align-last: center;
+}
+
+#current-mood {
+    text-align-last: center;
+}
+
+#back-button {
+    background-color: var(--main-dark-grey);
+    border: none;
+    margin: auto;
+    padding: 10px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: .3s;
+    border: 2px solid white;
+}
+
+#back-button:hover {
+    background-color: #404040;
 }

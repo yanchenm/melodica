@@ -35,7 +35,7 @@ const Main = () => {
     return (
         <div id="main-container">
             <div id="intro">
-                <p>Curious to see how your music tastes affects your mood?</p>
+                <p>Curious to see how your music taste affects your mood?</p>
                 <p>Find out here!</p>
             </div>
             <a href={getQueryString()} id="login-button">CONNECT WITH SPOTIFY</a>

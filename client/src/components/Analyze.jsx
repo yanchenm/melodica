@@ -13,13 +13,13 @@ function Analyze() {
 
     useEffect(() => {
         const getUser = async () => {           
-            const req = await api.get('/User');
+            const req = await api.get('/user');
             const data = await req.data;
             setUser(data.name.split(" ")[0]);
         }
 
         const getData = async () => {
-            const req = await api.get('/GetRecentlyPlayed');
+            const req = await api.get('/recents');
             const data = await req.data;
             let songs = []
             data.songs.forEach(song => {
@@ -57,11 +57,18 @@ function Analyze() {
     }, )
     
     return (
-        <div>
-            <h1> Hi, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay!</h1>
-            <Graph
-                data={songData}
-            />
+        <div id="analysis-container">
+            <h1 id="analysis-header">
+                Hi, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and <br/> 
+                your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay!
+            </h1>
+            <div id="analysis-content-container">
+                <Graph data={songData} />
+                <div id="button-container">
+                    <a id="recommend-button" href="../mood">FIND ME SOME MUSIC</a>
+                    <a href="../" id="back-button">GO BACK</a>
+                </div>
+            </div>
         </div>
     )
 }

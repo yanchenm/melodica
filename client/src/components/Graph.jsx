@@ -9,7 +9,9 @@ const ToolTip = (props) => {
     else {
         return (
             <div className="tooltip" style={{ left: `${props.left + 15}px`, top: `${props.top + 15}px` }}>
-                {props.fields.map((field, i) => <p key={i}>{field}</p>)}
+                <p id="tooltip-header">{props.fields[0]}</p>
+                <p>{props.fields[1]}</p>
+                <p>{props.fields[2]}</p>
             </div>
         );
     }
@@ -47,7 +49,7 @@ const Graph = (props) => {
 
             svg.selectAll("circle")
                 .data(data).enter().append("circle")
-                .style("fill", "orange")
+                .style("fill", "#1db954")
                 .attr("r", 5)
                 .attr("cx", d => {return x(d.pos)})
                 .attr("cy", d => {return y(d.energy)})
@@ -55,10 +57,9 @@ const Graph = (props) => {
                     setLeftState(d.x);
                     setTopState(d.y);
                     setFieldsState([
+                        `${d.target.__data__.artist} - ${d.target.__data__.name}`,
                         `Positivity: ${d.target.__data__.pos}`,
                         `Energy: ${d.target.__data__.energy}`,
-                        `Title: ${d.target.__data__.name}`,
-                        `Artist: ${d.target.__data__.artist}`
                     ]);
                 })
                 .on("mouseout", d => {
@@ -76,19 +77,21 @@ const Graph = (props) => {
             svg.append("g").attr("transform", "translate(" + yTranslate + ", 0)").call(yAxis);
             d3.json("data.json")
             
-            const xTextOffset = (height / 2) + 30;
-            const yTextOffset = (width / 2) + 20;
-            svg.append("text").text("Positivity")
-                .attr("x", 40)
+            const xTextOffset = (height / 2) - 15;
+            const yTextOffset = (width / 2);
+            svg.append("text").text("Positivity +")
+                .attr("x", width-50)
                 .attr("y", xTextOffset)
                 .style("text-anchor", "middle")
-                .style("color", "white");
+                .style("fill", "white")
+                .style("font-weight", "700");
         
-            svg.append("text").text("Energy")
+            svg.append("text").text("Energy +")
                 .attr("x", yTextOffset)
                 .attr("y", 20)
                 .style("text-anchor", "middle")
-                .style("color", "white");
+                .style("fill", "white")
+                .style("font-weight", "700");
         }
         
     }, [props.data]);

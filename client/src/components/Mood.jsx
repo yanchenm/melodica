@@ -1,51 +1,15 @@
 import '../styles/Mood.css';
 import React, { useState } from 'react';
 import Recommendations from './RecommendationList';
+import {api} from "../api";
 
-// rec = {album cover, song title, artist, link to spotify}
-const recs = [
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-]
-
+const emotion_map = {
+    happy: "happy,pop",
+    sad: "sad,emo",
+    excited: "edm,house,dance",
+    focused: "piano,chill,study",
+    relaxed: "chill,ambient,classical"
+}
 const Mood = () => {
 
     const [currentMood, setCurrentMood] = useState("");
@@ -55,8 +19,20 @@ const Mood = () => {
     const handleCurrentMoodChange = (e) => setCurrentMood(e.target.value);
     const handleDesiredMoodChange = (e) => setDesiredMood(e.target.value);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const req = await api.get(`/recommended?emotion=${emotion_map[desiredMood]}`);
+        const songs = await req.data;
+        let recs = [];
+        for (let i = 0; i < songs.tracks.length; i++) {
+            const rec = {
+                title: songs.tracks[i].name,
+                artist: songs.tracks[i].artists[0].name,
+                img: songs.tracks[i].album.images[1].url,
+                url: songs.tracks[i].external_urls.spotify
+            }
+            recs.push(rec);
+        }
         setRecommendations(recs);
     }
 
@@ -88,16 +64,14 @@ const Mood = () => {
                                 <option value="" disabled>(pick a mood)</option>
                                 <option value="happy">happy</option>
                                 <option value="sad">sad</option>
-                                <option value="scared">scared</option>
-                                <option value="stressed">stressed</option>
-                                <option value="depressed">depressed</option>
                                 <option value="excited">excited</option>
-                                <option value="overwhelmed">overwhelmed</option>
+                                <option value="focused">focused</option>
                                 <option value="relaxed">relaxed</option>
                             </select>
                         </p>
                         <input type="submit" value="FIND ME SOME SONGS!" id="submit-button" />
                     </form>
+                    <a href="../analyze" id="back-button">GO BACK</a>
                 </div>
             </div>
         );
