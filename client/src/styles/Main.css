@@ -37,8 +37,10 @@
     border-radius: 30px;
     text-decoration: none;
     font-weight: 700;
+    transition: .3s;
 }
 
 #login-button:hover {
     background-color: var(--main-green-hover);
+    transition: .3s;
 }
