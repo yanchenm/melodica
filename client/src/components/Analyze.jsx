@@ -1,6 +1,7 @@
 import "../styles/Analyze.css";
 
 import {React, useEffect, useState}  from 'react';
+
 import Graph from "./Graph";
 import {api} from '../api';
 
@@ -61,7 +62,7 @@ function Analyze() {
     return (
         <div id="analysis-container">
             <h1 id="analysis-header">
-                Hi, {user}! Your average music positivity is <span className="positivity">{positivity || 0}%</span>, and <br/> 
+                {newUser ? 'Hi' : 'Welcome back'}, {user}! Your average music positivity is <span className="positivity">{positivity || 0}%</span>, and <br/> 
                 your average musical energy is <span className="energy">{energy || 0}%</span>. Hope you're doing okay {positivity < 40 ? ':(' : '!'}
             </h1>
             <div id="analysis-content-container">
