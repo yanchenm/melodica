@@ -98,6 +98,7 @@ const Mood = () => {
                         </p>
                         <input type="submit" value="FIND ME SOME SONGS!" id="submit-button" />
                     </form>
+                    <a href="../analyze" id="back-button">GO BACK</a>
                 </div>
             </div>
         );

@@ -1,7 +1,69 @@
 .positivity {
-    color: blue;
+    color: #95d3e9;
+    font-size: 1.2em;
 }
 
 .energy {
-    color: coral;
+    color: #f65c44;
+    font-size: 1.2em;
+}
+
+#analysis-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    margin: auto;
+    padding-top: 50px;
+}
+
+#analysis-header {
+    font-size: 25px;;
+}
+
+#analysis-content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+}
+
+#recommend-button {
+    background-color: var(--main-green);
+    border: none;
+    margin: 10px 30px;
+    padding: 17px 35px 17px 35px;
+    border-radius: 30px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+#recommend-button:hover {
+    background-color: var(--main-green-hover);
+    transition: .3s;
+}
+
+#back-button {
+    background-color: var(--main-dark-grey);
+    border: none;
+    margin: auto;
+    padding: 10px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: .3s;
+    font-size: 0.8em;
+    border: 2px solid white;
+}
+
+#back-button:hover {
+    background-color: #404040;
 }

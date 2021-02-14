@@ -20,7 +20,8 @@ const Recommendations = (props) => {
     return  (
         <div id="recommendations-container">
             <p id="recommendations-intro">
-                Based on your choices, <br/> here are some recommendations!
+                Based on your choices, <br/> here are some recommendations! <br/>
+                <span id="small-text">Click on one to open it in Spotify.</span>
             </p>
             <button id="reset-button" onClick={props.reset}>I WANT NEW SONGS</button>
             <ul id="recommendations">
