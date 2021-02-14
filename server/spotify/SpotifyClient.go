@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -24,14 +25,27 @@ type ErrorResponse struct {
 	} `json:"error"`
 }
 
-type RefreshResponse struct {
-	AccessToken string `json:"access_token"`
-	Scope       string `json:"scope"`
-	ExpiresIn   int    `json:"expires_in"`
+type AuthResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+type AuthError struct {
+	Error            string `json:"error"`
+	ErrorDescription string `json:"error_description"`
 }
 
 func Initialize(accessToken, refreshToken string) *Client {
 	httpClient := &http.Client{}
+
+	if !strings.HasPrefix(accessToken, "Bearer ") {
+		accessToken = "Bearer " + accessToken
+	}
+
+	if !strings.HasPrefix(refreshToken, "Bearer ") {
+		refreshToken = "Bearer " + refreshToken
+	}
+
 	return &Client{
 		accessToken:  accessToken,
 		refreshToken: refreshToken,
@@ -85,13 +99,17 @@ func (c *Client) Do(req *http.Request) (*http.Response, bool, error) {
 	}
 
 	defer refreshRes.Body.Close()
-	refreshResponse := RefreshResponse{}
+	refreshResponse := AuthResponse{}
 	decoder = json.NewDecoder(refreshRes.Body)
 	if err = decoder.Decode(&refreshResponse); err != nil {
 		return nil, false, err
 	}
 
 	c.accessToken = refreshResponse.AccessToken
+
+	if refreshResponse.RefreshToken != "" {
+		c.refreshToken = refreshResponse.RefreshToken
+	}
 
 	// Try request again
 	req.Header.Set("Authorization", c.accessToken)

@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/yanchenm/musemoods/spotify"
@@ -53,6 +54,13 @@ func UserHTTP(w http.ResponseWriter, r *http.Request) {
 			Value:    client.GetAccessToken(),
 			HttpOnly: true,
 		})
+	}
+
+	if res.StatusCode != http.StatusOK {
+		defer res.Body.Close()
+		w.WriteHeader(res.StatusCode)
+		_, _ = io.Copy(w, res.Body)
+		return
 	}
 
 	defer res.Body.Close()

@@ -2,7 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	"log"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -14,11 +14,6 @@ import (
 type LoginRequest struct {
 	AccessCode  string `json:"access_code"`
 	RedirectURI string `json:"redirect_uri"`
-}
-
-type AuthResponse struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
 }
 
 func LoginHTTP(w http.ResponseWriter, r *http.Request) {
@@ -54,13 +49,14 @@ func LoginHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if res.StatusCode != http.StatusOK {
-		log.Printf("request failed: %v", res)
-		http.Error(w, "Failed to obtain authorization from Spotify", http.StatusUnauthorized)
+		defer res.Body.Close()
+		w.WriteHeader(res.StatusCode)
+		_, _ = io.Copy(w, res.Body)
 		return
 	}
 
 	defer res.Body.Close()
-	authResponse := AuthResponse{}
+	authResponse := spotify.AuthResponse{}
 	decoder = json.NewDecoder(res.Body)
 	if err = decoder.Decode(&authResponse); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

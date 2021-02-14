@@ -5,12 +5,16 @@ import (
 	"log"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
+	"github.com/joho/godotenv"
 
 	server "github.com/yanchenm/musemoods"
 )
 
 func main() {
 	ctx := context.Background()
+	if err := godotenv.Load("../.env.yaml"); err != nil {
+		log.Fatalf("couldn't read env: %v\n", err)
+	}
 
 	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/login", server.LoginHTTP); err != nil {
 		log.Fatalf("/login: %v\n", err)
