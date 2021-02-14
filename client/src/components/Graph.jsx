@@ -24,16 +24,16 @@ const Graph = (props) => {
     const maxVal = data => {
         let maxX = 0;
         let maxY = 0;
-        console.log(data);
         data.forEach(e => {
-            maxX = Math.max(maxX, Math.abs(e["x"]));
-            maxY = Math.max(maxY, Math.abs(e["y"]));
+            maxX = Math.max(maxX, Math.abs(e.pos));
+            maxY = Math.max(maxY, Math.abs(e.energy));
         });
         
         return [maxX, maxY];
     }
 
     useEffect(() => {
+        console.log(props.data);
         if (props.data && graphRef.current) {
             d3.selectAll("svg").remove();
             const width = 700;
@@ -43,32 +43,31 @@ const Graph = (props) => {
                 .attr("width", width)
                 .attr("height", height)
             const data = props.data;
-            const [maxX, maxY] = maxVal(data);
-            console.log(data);
-            console.log(maxX, maxY);
-            let x = d3.scaleLinear().domain([-maxX,maxX]).range([50, width - 50]);
-            let y = d3.scaleLinear().domain([-maxY,maxY]).range([height - 50, 50]);
+            let x = d3.scaleLinear().domain([0,1]).range([50, width - 50]);
+            let y = d3.scaleLinear().domain([0,1]).range([height - 50, 50]);
 
             svg.selectAll("circle")
                 .data(data).enter().append("circle")
                 .style("fill", "orange")
-                .attr("r", 10)
-                .attr("cx", d => x(d.x))
-                .attr("cy", d => y(d.y))
-                .on("mouseover", d => {
+                .attr("r", 5)
+                .attr("cx", d => {return x(d.pos)})
+                .attr("cy", d => {return y(d.energy)})
+                .on("mouseover", (d, i) => {
                     setLeftState(d.x);
                     setTopState(d.y);
                     setFieldsState([
-                        `Positivity: ${d.x}`,
-                        `Energy: ${d.y}`,
-                        `Title: ${d.title}`
+                        `Positivity: ${d.target.__data__.pos}`,
+                        `Energy: ${d.target.__data__.energy}`,
+                        `Title: ${d.target.__data__.name}`,
+                        `Artist: ${d.target.__data__.artist}`
                     ]);
                 })
                 .on("mouseout", d => {
                     setLeftState(0);
                     setTopState(0);
                     setFieldsState([]);
-                });
+                })
+                .exit().remove();
             
             const xAxis = d3.axisBottom().tickValues([]).tickSizeOuter(0).scale(x);
             const yAxis = d3.axisLeft().tickValues([]).tickSizeOuter(0).scale(y);
@@ -78,8 +77,8 @@ const Graph = (props) => {
             svg.append("g").attr("transform", "translate(" + yTranslate + ", 0)").call(yAxis);
             d3.json("data.json")
             
-            const xTextOffset = (height / 2) - 20;
-            const yTextOffset = (width / 2) + 50;
+            const xTextOffset = (height / 2) + 30;
+            const yTextOffset = (width / 2) + 20;
             svg.append("text").text("Positivity")
                 .attr("x", 40)
                 .attr("y", xTextOffset)
