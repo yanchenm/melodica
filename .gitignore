@@ -1,3 +1,6 @@
 .DS_Store/
 */.idea
 */.vscode
+*/.env
+server/.env.yaml
+client/yarn.lock

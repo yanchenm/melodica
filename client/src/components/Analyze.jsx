@@ -1,8 +1,7 @@
-import {React, useState, useEffect}  from 'react';
-import { BrowserRouter as Router, useLocation, Switch } from 'react-router-dom';
-import axios from "axios";
-import Graph from './Graph';
-
+import {React, useEffect, useState}  from 'react';
+import { BrowserRouter as Router, Switch, useLocation } from 'react-router-dom';
+import Graph from "./Graph";
+import {api} from '../api';
 
 function Analyze() {
 
@@ -11,23 +10,23 @@ function Analyze() {
 
     useEffect(() => {
         const getUser = async () => {           
-            const req = await axios.get("https://us-central1-musemood.cloudfunctions.net/User", {withCredentials: true});
+            const req = await api.get('/User');
             const data = await req.data;
-            setUser(data.names.split(" ")[0]);
+            setUser(data.name);
             console.log(data);
         }
 
-        const getSongData = async () => {
-            const req = await axios.get("https://us-central1-musemood.cloudfunctions.net/GetRecentlyPlayed", {withCredentials: true})
+        const getData = async () => {
+            const req = await api.get('/GetRecentlyPlayed');
             const data = await req.data;
             console.log(data);
-            setSongData(data);
         }
+
         // const urlAddress = new URLSearchParams(props.location.search).get("code");
         // const a = urlAddress.get('code');
 
         getUser();
-        getSongData();
+        getData();
     }, [])
 
     useEffect(() => {
