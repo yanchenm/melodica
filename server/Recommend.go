@@ -89,6 +89,7 @@ func GetRecommended(w http.ResponseWriter, r *http.Request) {
 	}
 	queryParams := req.URL.Query()
 	queryParams.Add("seed_genres", strings.Join(emotion[:], ","))
+	queryParams.Add("market", "CA")
 	req.URL.RawQuery = queryParams.Encode()
 
 	res, refreshed, err := client.Do(req)
