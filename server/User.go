@@ -61,7 +61,7 @@ func User(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "https://melodica.tech")
 
 	for _, cookie := range r.Cookies() {
-		fmt.Println("Found a cookie named: ", cookie.Name)
+		fmt.Fprintf(w, "Found cookie: %s\n", cookie.Name)
 	}
 
 	if r.Method != http.MethodGet {
