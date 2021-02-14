@@ -45,7 +45,7 @@ a {
     background-color: white;
 }
 
-#recommendations-container #recommendations .song *:hover {
+#recommendations-container #recommendations .song:hover {
     background-color: var(--main-light-gray);
     transition: .3s;
 }
