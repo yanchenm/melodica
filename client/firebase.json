@@ -8,10 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "**",
-        "destination": "/index.html"
-      },
-      {
         "source": "/api/login",
         "function": "Login"
       },
@@ -22,6 +18,10 @@
       {
         "source": "/api/recents",
         "function": "GetRecentlyPlayed"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }
