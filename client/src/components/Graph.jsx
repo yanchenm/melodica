@@ -33,7 +33,6 @@ const Graph = (props) => {
     }
 
     useEffect(() => {
-        console.log(props.data);
         if (props.data && graphRef.current) {
             d3.selectAll("svg").remove();
             const width = 700;

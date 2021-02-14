@@ -34,29 +34,28 @@ function Analyze() {
             setSongData(songs);
             calculateNetPositivity();
         }
+        const calculateNetPositivity = () => {
+            let pos = 0;
+            let energy = 0;
+            for (let i = 0; i < songData.length; i++) {
+                pos += songData[i].pos;
+                energy += songData[i].energy;
+            }
+            setPositivity(Math.round(pos/songData.length * 100));
+            setEnergy(Math.round(energy/songData.length * 100));
+        }
 
         // const urlAddress = new URLSearchParams(props.location.search).get("code");
         // const a = urlAddress.get('code');
 
         getUser();
         getData();
-    }, [])
+    }, [positivity, energy])
 
     useEffect(() => {
 
     }, )
-    const calculateNetPositivity = () => {
-        let pos = 0;
-        let energy = 0;
-        for (let i = 0; i < songData.length; i++) {
-            pos += songData[i].pos;
-            energy += songData[i].energy;
-        }
-        setPositivity(Math.round(pos/songData.length * 100));
-        setEnergy(Math.round(energy/songData.length * 100));
-        console.log(positivity);
-        console.log(energy);
-    }
+    
     return (
         <div>
             <h1> Hi, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay!</h1>
