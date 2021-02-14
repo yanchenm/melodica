@@ -1,7 +1,7 @@
 import '../styles/Mood.css';
 import React, { useState } from 'react';
 import Recommendations from './RecommendationList';
-
+import {api} from "../api";
 // rec = {album cover, song title, artist, link to spotify}
 const recs = [
     {
@@ -46,6 +46,13 @@ const recs = [
     },
 ]
 
+const emotion_map = {
+    happy: "happy,pop",
+    sad: "sad,emo",
+    excited: "edm,house,dance",
+    focused: "piano,chill,study",
+    relaxed: "chill,ambient,classical"
+}
 const Mood = () => {
 
     const [currentMood, setCurrentMood] = useState("");
@@ -55,8 +62,13 @@ const Mood = () => {
     const handleCurrentMoodChange = (e) => setCurrentMood(e.target.value);
     const handleDesiredMoodChange = (e) => setDesiredMood(e.target.value);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        const req = await api.get(`/recommended?emotion=${emotion_map[desiredMood]}`);
+        const songs = await req.data;
+        console.log(songs);
+        let recs = [];
+
         setRecommendations(recs);
     }
 
@@ -88,11 +100,8 @@ const Mood = () => {
                                 <option value="" disabled>(pick a mood)</option>
                                 <option value="happy">happy</option>
                                 <option value="sad">sad</option>
-                                <option value="scared">scared</option>
-                                <option value="stressed">stressed</option>
-                                <option value="depressed">depressed</option>
                                 <option value="excited">excited</option>
-                                <option value="overwhelmed">overwhelmed</option>
+                                <option value="focused">focused</option>
                                 <option value="relaxed">relaxed</option>
                             </select>
                         </p>

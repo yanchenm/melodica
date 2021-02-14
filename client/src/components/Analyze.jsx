@@ -13,13 +13,13 @@ function Analyze() {
 
     useEffect(() => {
         const getUser = async () => {           
-            const req = await api.get('/User');
+            const req = await api.get('/user');
             const data = await req.data;
             setUser(data.name.split(" ")[0]);
         }
 
         const getData = async () => {
-            const req = await api.get('/GetRecentlyPlayed');
+            const req = await api.get('/recents');
             const data = await req.data;
             let songs = []
             data.songs.forEach(song => {

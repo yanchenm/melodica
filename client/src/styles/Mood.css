@@ -43,3 +43,11 @@ select {
 #submit-button:hover {
     background-color: var(--main-green-hover);
 }
+
+#desired-mood {
+    text-align-last: center;
+}
+
+#current-mood {
+    text-align-last: center;
+}
