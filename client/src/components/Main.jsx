@@ -34,6 +34,7 @@ const Main = () => {
 
     return (
         <div id="main-container">
+            <img id="logo" src="/brand.png" alt="logo"/>
             <div id="intro">
                 <p>Curious to see how your music taste affects your mood?</p>
                 <p>Find out here!</p>
