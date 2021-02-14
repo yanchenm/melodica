@@ -48,12 +48,16 @@ const recs = [
 
 const Mood = () => {
 
+    const [currentMood, setCurrentMood] = useState("");
+    const [desiredMood, setDesiredMood] = useState("");
     const [recommendations, setRecommendations] = useState([]);
 
+    const handleCurrentMoodChange = (e) => setCurrentMood(e.target.value);
+    const handleDesiredMoodChange = (e) => setDesiredMood(e.target.value);
+
     const handleSubmit = (e) => {
-        // TODO: Actually handle submit and call setRecommendation
-        setRecommendations(recs);
         e.preventDefault();
+        setRecommendations(recs);
     }
 
     const resetRecommendations = () => {
@@ -68,7 +72,7 @@ const Mood = () => {
                     <form id="mood-prompt" onSubmit={handleSubmit}>
                         <p>
                             I'm 
-                            <select name="current-mood" id="current-mood" defaultValue="">
+                            <select name="current-mood" id="current-mood" defaultValue="" onChange={handleCurrentMoodChange}>
                                 <option value="" disabled>(pick a mood)</option>
                                 <option value="happy">happy</option>
                                 <option value="sad">sad</option>
@@ -80,7 +84,7 @@ const Mood = () => {
                                 <option value="relaxed">relaxed</option>
                             </select>
                             and I want to feel 
-                            <select name="desired-mood" id="desired-mood" defaultValue="">
+                            <select name="desired-mood" id="desired-mood" defaultValue="" onChange={handleDesiredMoodChange}>
                                 <option value="" disabled>(pick a mood)</option>
                                 <option value="happy">happy</option>
                                 <option value="sad">sad</option>
