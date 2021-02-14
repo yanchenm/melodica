@@ -35,7 +35,20 @@ select {
     background-color: var(--main-dark-grey);
 }
 
-#submit-button {
+#submit-button-disabled {
+    background-color: var(--main-grey);
+    border: none;
+    margin: 60px 0 10px 0;
+    padding: 17px 35px;
+    border-radius: 30px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: .3s;
+}
+
+#submit-button-enabled {
     background-color: var(--main-green);
     border: none;
     margin: 60px 0 10px 0;
@@ -48,7 +61,7 @@ select {
     transition: .3s;
 }
 
-#submit-button:hover {
+#submit-button-enabled:hover {
     background-color: var(--main-green-hover);
 }
 
@@ -69,6 +82,7 @@ select {
     text-decoration: none;
     transition: .3s;
     border: 2px solid white;
+    cursor: default;
 }
 
 #back-button:hover {

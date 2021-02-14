@@ -38,6 +38,17 @@ const Mood = () => {
 
     const resetRecommendations = () => {
         setRecommendations([]);
+        setCurrentMood("");
+        setDesiredMood("");
+    }
+
+    const SearchButton = (props) => {
+        if (!props.currentMood || !props.desiredMood) {
+            return <input type="submit" value="FIND ME SOME SONGS!" id="submit-button-disabled" disabled />;
+        }
+        else {
+            return <input type="submit" value="FIND ME SOME SONGS!" id="submit-button-enabled" />;
+        }
     }
 
     if (recommendations.length === 0)
@@ -69,7 +80,7 @@ const Mood = () => {
                                 <option value="relaxed">relaxed</option>
                             </select>
                         </p>
-                        <input type="submit" value="FIND ME SOME SONGS!" id="submit-button" />
+                        <SearchButton currentMood={currentMood} desiredMood={desiredMood} />
                     </form>
                     <a href="../analyze" id="back-button">GO BACK</a>
                 </div>
