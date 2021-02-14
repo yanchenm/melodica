@@ -1,8 +1,10 @@
+import "../styles/Analyze.css";
+
 import {React, useEffect, useState}  from 'react';
 import { BrowserRouter as Router, Switch, useLocation } from 'react-router-dom';
+
 import Graph from "./Graph";
 import {api} from '../api';
-import "../styles/Analyze.css";
 
 function Analyze() {
 
@@ -10,12 +12,14 @@ function Analyze() {
     const [songData, setSongData] = useState([]);
     const [positivity, setPositivity] = useState(0);
     const [energy, setEnergy] = useState(0);
+    const [newUser, setNewUser] = useState(true);
 
     useEffect(() => {
         const getUser = async () => {           
             const req = await api.get('/user');
             const data = await req.data;
             setUser(data.name.split(" ")[0]);
+            setNewUser(data.new);
         }
 
         const getData = async () => {
@@ -59,7 +63,7 @@ function Analyze() {
     return (
         <div id="analysis-container">
             <h1 id="analysis-header">
-                Hi, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and <br/> 
+                {newUser ? 'Hi' : 'Welcome back'}, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and <br/> 
                 your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay {positivity < 40 ? ':(' : '!'}
             </h1>
             <div id="analysis-content-container">
