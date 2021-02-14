@@ -2,49 +2,6 @@ import '../styles/Mood.css';
 import React, { useState } from 'react';
 import Recommendations from './RecommendationList';
 import {api} from "../api";
-// rec = {album cover, song title, artist, link to spotify}
-const recs = [
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-    {
-        img: "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Porter_Robinson_-_Worlds.jpg/220px-Porter_Robinson_-_Worlds.jpg",
-        title: "Shelter",
-        artist: "Porter Robinson"
-    },
-]
 
 const emotion_map = {
     happy: "happy,pop",
@@ -66,9 +23,16 @@ const Mood = () => {
         e.preventDefault();
         const req = await api.get(`/recommended?emotion=${emotion_map[desiredMood]}`);
         const songs = await req.data;
-        console.log(songs);
         let recs = [];
-
+        for (let i = 0; i < songs.tracks.length; i++) {
+            const rec = {
+                title: songs.tracks[i].name,
+                artist: songs.tracks[i].artists[0].name,
+                img: songs.tracks[i].album.images[1].url,
+                url: songs.tracks[i].external_urls.spotify
+            }
+            recs.push(rec);
+        }
         setRecommendations(recs);
     }
 
