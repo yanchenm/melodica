@@ -34,6 +34,8 @@ const Graph = (props) => {
     }
 
     useEffect(() => {
+        if (props.data && graphRef.current) {
+            d3.selectAll("svg").remove();
             const width = 700;
             const height = 700;
             const margin = 50;
@@ -46,7 +48,7 @@ const Graph = (props) => {
 
             let x = d3.scaleLinear().domain([-maxX,maxX]).range([margin, width - margin]);
             let y = d3.scaleLinear().domain([-maxY,maxY]).range([height - margin, margin]);
-    
+
             svg.selectAll("circle")
                 .data(data).enter().append("circle")
                 .style("fill", "orange")
@@ -86,7 +88,10 @@ const Graph = (props) => {
                 .attr("x", yTextOffset)
                 .attr("y", 20)
                 .style("text-anchor", "middle");
-
+            
+                svg.exit().remove();
+        }
+        
     }, [props.data]);
 
     return (
