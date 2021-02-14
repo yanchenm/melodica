@@ -12,13 +12,14 @@ defaults:
   run:
     working-directory: server
 
-strategy:
-  matrix:
-    function: [Login, User, GetRecentlyPlayed]
-
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        function: [Login, User, GetRecentlyPlayed]
+
     steps:
       - uses: actions/checkout@v2
 
