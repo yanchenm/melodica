@@ -1,7 +1,7 @@
 import Main from './components/Main';
 import Analyze from './components/Analyze';
 import Mood from './components/Mood';
-import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import axios from "axios";
 import Login from './components/Login';

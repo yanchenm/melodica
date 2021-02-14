@@ -3,9 +3,9 @@ import '../styles/RecommendationList.css';
 const getRecommendationList = (recs) => {
     let recList = recs.map((rec) => {
         return (
-            <a href={rec.url} target="_blank" className="outer-container">
+            <a href={rec.url} target="_blank" rel="noreferrer" className="outer-container">
                 <li key={rec.url} className="song"> 
-                    <img className="song-cover" src={rec.img}></img>
+                    <img className="song-cover" src={rec.img} alt=""></img>
                     <div className="song-info">
                         <p className="song-title" style={{ color: "black" }}>{rec.title}</p>
                         <p className="song-artist" style={{ color: "black" }}>{rec.artist}</p>

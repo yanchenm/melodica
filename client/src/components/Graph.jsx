@@ -23,17 +23,6 @@ const Graph = (props) => {
     const [leftState, setLeftState] = useState(0);
     const [fieldsState, setFieldsState] = useState([]);
 
-    const maxVal = data => {
-        let maxX = 0;
-        let maxY = 0;
-        data.forEach(e => {
-            maxX = Math.max(maxX, Math.abs(e.pos));
-            maxY = Math.max(maxY, Math.abs(e.energy));
-        });
-        
-        return [maxX, maxY];
-    }
-
     useEffect(() => {
         if (props.data && graphRef.current) {
             d3.selectAll("svg").remove();
@@ -53,7 +42,7 @@ const Graph = (props) => {
                 .attr("r", 5)
                 .attr("cx", d => {return x(d.pos)})
                 .attr("cy", d => {return y(d.energy)})
-                .on("mouseover", (d, i) => {
+                .on("mouseover", (d) => {
                     setLeftState(d.x);
                     setTopState(d.y);
                     setFieldsState([
