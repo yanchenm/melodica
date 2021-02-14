@@ -33,7 +33,7 @@ type Album struct {
 type Image struct {
 	Height int    `json:"height"`
 	URL    string `json:"url"`
-	width  int    `json:"width"`
+	Width  int    `json:"width"`
 }
 
 func GetRecommended(w http.ResponseWriter, r *http.Request) {

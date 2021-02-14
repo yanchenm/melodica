@@ -129,7 +129,13 @@ func User(w http.ResponseWriter, r *http.Request) {
 
 	// Create user if not exists
 	if !userExists {
-		_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Set(r.Context(), spotifyUser)
+		// If user has no email on Spotify account, generate them an ID
+		if spotifyUser.Email == "" {
+			_, _, err = fsClient.Collection(UsersCollection).Add(r.Context(), spotifyUser)
+		} else {
+			_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Set(r.Context(), spotifyUser)
+		}
+
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

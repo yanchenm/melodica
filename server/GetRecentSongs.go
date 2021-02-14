@@ -266,13 +266,16 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	currTime := time.Now().Unix()
-	_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).
-		Collection(RecentsCollection).Doc(strconv.FormatInt(currTime, 10)).
-		Set(r.Context(), songList)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	// If Spotify user has no email on account, skip this step
+	if spotifyUser.Email != "" {
+		currTime := time.Now().Unix()
+		_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).
+			Collection(RecentsCollection).Doc(strconv.FormatInt(currTime, 10)).
+			Set(r.Context(), songList)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	if refreshed {
