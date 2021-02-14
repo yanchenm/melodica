@@ -29,9 +29,57 @@ type SongList struct {
 }
 
 type Song struct {
-	Name    string
-	ID      string
-	Artists []string
+	Name      string
+	ID        string
+	Artists   []string
+	Attribute Attribute
+}
+
+type AttributeList struct {
+	Attributes []Attribute `json:"audio_features"`
+}
+
+type Attribute struct {
+	Danceability     float32 `json:"danceability"`
+	Energy           float32 `json:"energy"`
+	Key              int     `json:"key"`
+	Loudness         float32 `json:"loudness"`
+	Mode             int     `json:"mode"`
+	Speechiness      float32 `json:"speechiness"`
+	Acousticness     float32 `json:"acousticness"`
+	Instramentalness float32 `json:"instrumentalness"`
+	Liveness         float32 `json:"liveness"`
+	Valence          float32 `json:"valence"`
+	Tempo            float32 `json:"tempo"`
+	Type             string  `json:"type"`
+	ID               string  `json:"id"`
+	Href             string  `json:"track_href"`
+	Duration         int     `json:"duration_ms"`
+	TimeSignature    int     `json:"4"`
+}
+
+func getIDParam(songList *SongList) string {
+	idList := []string{}
+
+	for i := 0; i < len(songList.Songs); i++ {
+		idList = append(idList, songList.Songs[i].ID)
+	}
+
+	return strings.Join(idList[:], ",")
+}
+
+func appendAttributes(attributeList AttributeList, songList *SongList) *SongList {
+
+	for i := 0; i < len(songList.Songs); i++ {
+		songID := songList.Songs[i].ID
+		for j := 0; j < len(attributeList.Attributes); j++ {
+			if songID == attributeList.Attributes[j].ID {
+				songList.Songs[i].Attribute = attributeList.Attributes[j]
+				break
+			}
+		}
+	}
+	return nil
 }
 
 func convertJSON(trackList *Tracks) *SongList {
@@ -133,19 +181,57 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 		_, _ = io.Copy(w, res.Body)
 		return
 	}
-
 	defer res.Body.Close()
 
-	serialBody, _ := ioutil.ReadAll(res.Body)
-
 	var parsed Tracks
+	serialBody, _ := ioutil.ReadAll(res.Body)
 	json.Unmarshal([]byte(serialBody), &parsed)
 
 	// Extract song info and build new song list struct
 	trackList := convertJSON(&parsed)
+	idList := getIDParam(trackList)
+
+	// Make another get request to
+	req, err = http.NewRequest("GET", "https://api.spotify.com/v1/audio-features", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	attrParams := req.URL.Query()
+	attrParams.Add("ids", idList)
+	req.URL.RawQuery = attrParams.Encode()
+
+	res, refreshed, err = client.Do(req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if refreshed {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "access",
+			Value:    client.GetAccessToken(),
+			HttpOnly: true,
+		})
+	}
+
+	if res.StatusCode != http.StatusOK {
+		defer res.Body.Close()
+		w.WriteHeader(res.StatusCode)
+		_, _ = io.Copy(w, res.Body)
+		return
+	}
+	defer res.Body.Close()
+
+	serialAttributes, _ := ioutil.ReadAll(res.Body)
+
+	var attributes AttributeList
+	json.Unmarshal([]byte(serialAttributes), &attributes)
+
+	songList := appendAttributes(attributes, trackList)
 
 	w.WriteHeader(http.StatusOK)
-	if err = json.NewEncoder(w).Encode(&trackList); err != nil {
+	if err = json.NewEncoder(w).Encode(&songList); err != nil {
 		panic(err)
 	}
 }
