@@ -1,0 +1,36 @@
+name: Deploy to Cloud Functions on merge
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - server/**
+
+defaults:
+  run:
+    working-directory: server
+
+strategy:
+  matrix:
+    function: [Login, User, GetRecentlyPlayed]
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: set up cloud sdk
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: deploy Functions
+        uses: google-github-actions/deploy-cloud-functions@main
+        with:
+          name: ${{ matrix.function }}
+          runtime: go113
+          env_vars: SPOTIFY_CLIENT_ID=${{secrets.SPOTIFY_CLIENT_ID}}, SPOTIFY_CLIENT_SECRET=${{secrets.SPOTIFY_CLIENT_SECRET}}
+
