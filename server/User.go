@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -66,13 +67,15 @@ func User(w http.ResponseWriter, r *http.Request) {
 
 	refreshCookie, err := r.Cookie("refresh")
 	if err != nil {
-		http.Error(w, "No refresh cookie", http.StatusUnauthorized)
+		s := fmt.Sprintf("No refresh cookie: %v", err)
+		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
 
 	accessCookie, err := r.Cookie("access")
 	if err != nil {
-		http.Error(w, "No access cookie", http.StatusUnauthorized)
+		s := fmt.Sprintf("No access cookie: %v", err)
+		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
 

@@ -9,7 +9,6 @@ const Login = () => {
         const sendCode = async () => {
             const params = new URLSearchParams(window.location.search);
             const code = params.get("code");
-            console.log(api.baseUrl);
             await api.post("/login", {access_code: code, redirect_uri: "https://melodica.tech/login"});
     
             history.push("/analyze");

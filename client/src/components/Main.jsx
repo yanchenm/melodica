@@ -11,7 +11,6 @@ const Main = () => {
         const params = new URLSearchParams(window.location.search);
 
         if (params.get("code")) {
-            console.log(params.get("code"));
             return <Redirect to={{
                 pathname: "/analyze",
                 state: {code: params.get("code")}
