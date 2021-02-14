@@ -25,10 +25,6 @@ select {
     background-color: var(--main-dark-grey);
 }
 
-select:focus {
-    outline: none;
-}
-
 #submit-button {
     background-color: var(--main-green);
     border: none;
