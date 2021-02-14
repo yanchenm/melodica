@@ -1,0 +1,46 @@
+:root {
+    --main-green: #1db954;
+    --main-green-hover: #1ED760;
+    --main-dark-grey: #181818;
+    --main-text-color: #FFFFFF;
+}
+
+#main-container {
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--main-dark-grey);
+}
+
+#intro {
+    font-weight: 800;
+    font-size: 25px;
+    color: var(--main-text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#intro p {
+    margin: 5px;
+}
+
+#login-button {
+    color: var(--main-text-color);
+    background-color: var(--main-green);
+    margin: 70px 20px;
+    padding: 17px 35px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: .3s;
+}
+
+#login-button:hover {
+    background-color: var(--main-green-hover);
+    transition: .3s;
+}

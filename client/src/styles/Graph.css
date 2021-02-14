@@ -1,0 +1,14 @@
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: white;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 10px;
+}

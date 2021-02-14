@@ -1,0 +1,63 @@
+:root {
+    --main-pink: #EFD2d2;
+    --main-light-gray: #E0E0E0;
+    --main-dark-grey: #181818;
+}
+
+body {
+    background-color: var(--main-pink);
+}
+
+#recommendations-intro {
+    font-size: 30px;
+    text-align: center;
+    margin: 60px 0;
+}
+
+#recommendations {
+    columns: 2;
+    list-style-type: disc;
+    list-style-position: inside;
+    width: 100%;
+    max-width: 60%;
+    margin: auto;
+}
+
+.song {
+    list-style: none;
+    display: flex;
+    background-color: white;
+    margin: 0 0 30px 0;
+    border-radius: 5px;
+    transition: .3s;
+}
+
+.song:hover {
+    background-color: var(--main-light-gray);
+    transition: .3s;
+}
+
+.song .song-cover {
+    width: 100px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.song .song-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-left: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song .song-info .song-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.song .song-info .song-artist {
+    font-size: 15px;
+}
