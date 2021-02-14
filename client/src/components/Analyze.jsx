@@ -9,9 +9,7 @@ function Analyze() {
 
     useEffect(() => {
         const getUser = async () => {           
-            const params = new URLSearchParams(window.location.search);
-        const code = params.get("code");
-        await axios.post("https://us-central1-musemood.cloudfunctions.net/Login", {access_code: code, redirect_uri: "http://localhost:3000/login"});
+
         const req = await axios.get("https://us-central1-musemood.cloudfunctions.net/User", {withCredentials: true});
         const data = await req.data;
         setUser(data.Name);
