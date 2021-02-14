@@ -3,15 +3,15 @@ import '../styles/RecommendationList.css';
 const getRecommendationList = (recs) => {
     let recList = recs.map((rec) => {
         return (
-            <li key={rec.url} className="song"> 
-                <a href={rec.url} target="_blank">
+            <a href={rec.url} target="_blank" className="outer-container">
+                <li key={rec.url} className="song"> 
                     <img className="song-cover" src={rec.img}></img>
                     <div className="song-info">
                         <p className="song-title" style={{ color: "black" }}>{rec.title}</p>
                         <p className="song-artist" style={{ color: "black" }}>{rec.artist}</p>
                     </div>
-                </a>
-            </li>
+                </li>
+            </a>
         );
     });
     return recList;
