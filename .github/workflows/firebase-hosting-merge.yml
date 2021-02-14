@@ -28,6 +28,7 @@ jobs:
           channelId: live
           projectId: musemood
           entrypoint: "./client"
-          env_vars: REACT_APP_SPOTIFY_CLIENT_ID=${{secrets.SPOTIFY_CLIENT_ID}}, REACT_APP_SPOTIFY_CLIENT_SECRET=${{secrets.SPOTIFY_CLIENT_SECRET}}
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
+          REACT_APP_SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+          REACT_APP_SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
