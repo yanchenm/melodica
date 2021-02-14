@@ -56,6 +56,10 @@ const Mood = () => {
         e.preventDefault();
     }
 
+    const resetRecommendations = () => {
+        setRecommendations([]);
+    }
+
     if (recommendations.length === 0)
         return (
             <div id="mood-container">
@@ -94,7 +98,7 @@ const Mood = () => {
             </div>
         );
     else {
-        return <Recommendations recommendations={recommendations}/>
+        return <Recommendations recommendations={recommendations} reset={resetRecommendations} />
     }
 }
 

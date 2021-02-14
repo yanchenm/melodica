@@ -1,16 +1,21 @@
-import {React, useRef, useEffect, useState} from 'react'
+import {React, useRef, useEffect, useState} from 'react';
 import * as d3 from "d3";
-import "../styles/Graph.css"
+import "../styles/Graph.css";
 
-const ToolTip = props => {
-    return (
-        <div className="tooltip">
-            {props.fields.map((field, i) => <p key={i}>{field}</p>)}
-        </div>
-    )
-    
+const ToolTip = (props) => {
+    if (props.left === 0 || props.top === 0) {
+        return (null);
+    }
+    else {
+        return (
+            <div className="tooltip" style={{ left: `${props.left + 15}px`, top: `${props.top + 15}px` }}>
+                {props.fields.map((field, i) => <p key={i}>{field}</p>)}
+            </div>
+        );
+    }
 }
-function Graph(props) {
+
+const Graph = (props) => {
     const graphRef = useRef(null);
     const [topState, setTopState] = useState(0);
     const [leftState, setLeftState] = useState(0);
@@ -49,8 +54,8 @@ function Graph(props) {
                 .attr("cx", d => x(d.x))
                 .attr("cy", d => y(d.y))
                 .on("mouseover", d => {
-                    setLeftState(x(d.x));
-                    setTopState(y(d.y));
+                    setLeftState(d.x);
+                    setTopState(d.y);
                     setFieldsState([
                         `Positivity: ${x(d.x)}`,
                         `Energy: ${x(d.y)}`,
@@ -81,14 +86,15 @@ function Graph(props) {
                 .attr("x", yTextOffset)
                 .attr("y", 20)
                 .style("text-anchor", "middle");
-        
-    }, [props.data])
+
+    }, [props.data]);
+
     return (
         <div>
             <div ref={graphRef} className="main"/>
             <ToolTip left={leftState} top={topState} fields={fieldsState}/>
         </div>
-    )
+    );
 }
 
 export default Graph;

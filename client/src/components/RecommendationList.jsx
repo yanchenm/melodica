@@ -22,6 +22,7 @@ const Recommendations = (props) => {
             <p id="recommendations-intro">
                 Based on your choices, <br/> here are some recommendations!
             </p>
+            <button id="reset-button" onClick={props.reset}>I WANT NEW SONGS</button>
             <ul id="recommendations">
                 {getRecommendationList(props.recommendations)}
             </ul>
