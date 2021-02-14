@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -53,6 +54,7 @@ func LoginHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if res.StatusCode != http.StatusOK {
+		log.Printf("request failed: %v", res)
 		http.Error(w, "Failed to obtain authorization from Spotify", http.StatusUnauthorized)
 		return
 	}
