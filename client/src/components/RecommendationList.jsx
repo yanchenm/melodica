@@ -2,14 +2,15 @@ import '../styles/RecommendationList.css';
 
 const getRecommendationList = (recs) => {
     let recList = recs.map((rec) => {
-        // need to fix keys and pass a unique id
         return (
-            <li key={rec.title} className="song"> 
-                <img className="song-cover" src={rec.img}></img>
-                <div className="song-info">
-                    <p className="song-title" style={{ color: "black"}}>{rec.title}</p>
-                    <p className="song-artist" style={{ color: "black"}}>{rec.artist}</p>
-                </div>
+            <li key={rec.url} className="song"> 
+                <a href={rec.url} target="_blank">
+                    <img className="song-cover" src={rec.img}></img>
+                    <div className="song-info">
+                        <p className="song-title" style={{ color: "black" }}>{rec.title}</p>
+                        <p className="song-artist" style={{ color: "black" }}>{rec.artist}</p>
+                    </div>
+                </a>
             </li>
         );
     });
