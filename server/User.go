@@ -2,18 +2,19 @@ package server
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
+
+	"github.com/yanchenm/musemoods/spotify"
 )
 
 type UserResponse struct {
 	Email string `json:"email"`
-	Name string `json:"name"`
+	Name  string `json:"name"`
 }
 
 type SpotifyUser struct {
 	Email string `json:"email"`
-	Name string `json:"display_name"`
+	Name  string `json:"display_name"`
 }
 
 func UserHTTP(w http.ResponseWriter, r *http.Request) {
@@ -22,38 +23,42 @@ func UserHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokens, ok := r.Header["Authorization"]
-	if !ok {
-		http.Error(w, "No authorization token", http.StatusUnauthorized)
+	refreshCookie, err := r.Cookie("refresh")
+	if err != nil {
+		http.Error(w, "No refresh cookie", http.StatusUnauthorized)
 		return
 	}
 
-	token := tokens[0]
-	if token == "" {
-		http.Error(w, "Invalid token", http.StatusUnauthorized)
+	accessCookie, err := r.Cookie("access")
+	if err != nil {
+		http.Error(w, "No access cookie", http.StatusUnauthorized)
 		return
 	}
 
-	client := &http.Client{}
+	refreshToken := refreshCookie.Value
+	accessToken := accessCookie.Value
+
+	client := spotify.Initialize(accessToken, refreshToken)
 	req, _ := http.NewRequest("GET", "https://api.spotify.com/v1/me", nil)
-	req.Header.Set("Authorization", token)
 
-	res, err := client.Do(req)
+	res, refreshed, err := client.Do(req)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if refreshed {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "access",
+			Value:    client.GetAccessToken(),
+			HttpOnly: true,
+		})
 	}
 
 	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	spotifyUser := SpotifyUser{}
-	err = json.Unmarshal(body, &spotifyUser)
-	if err != nil {
+	decoder := json.NewDecoder(res.Body)
+	if err = decoder.Decode(&spotifyUser); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
