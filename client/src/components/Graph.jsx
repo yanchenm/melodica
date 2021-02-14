@@ -38,16 +38,16 @@ const Graph = (props) => {
             d3.selectAll("svg").remove();
             const width = 700;
             const height = 700;
-            const margin = 50;
             let svg = d3.select(graphRef.current)
                 .append("svg")
                 .attr("width", width)
                 .attr("height", height)
             const data = props.data;
             const [maxX, maxY] = maxVal(data);
-
-            let x = d3.scaleLinear().domain([-maxX,maxX]).range([margin, width - margin]);
-            let y = d3.scaleLinear().domain([-maxY,maxY]).range([height - margin, margin]);
+            console.log(data);
+            console.log(maxX, maxY);
+            let x = d3.scaleLinear().domain([-maxX,maxX]).range([50, width - 50]);
+            let y = d3.scaleLinear().domain([-maxY,maxY]).range([height - 50, 50]);
 
             svg.selectAll("circle")
                 .data(data).enter().append("circle")
@@ -59,8 +59,8 @@ const Graph = (props) => {
                     setLeftState(d.x);
                     setTopState(d.y);
                     setFieldsState([
-                        `Positivity: ${x(d.x)}`,
-                        `Energy: ${x(d.y)}`,
+                        `Positivity: ${d.x}`,
+                        `Energy: ${d.y}`,
                         `Title: ${d.title}`
                     ]);
                 })
@@ -70,8 +70,8 @@ const Graph = (props) => {
                     setFieldsState([]);
                 });
             
-            const xAxis = d3.axisBottom().tickValues([]).scale(x);
-            const yAxis = d3.axisLeft().tickValues([]).scale(y);
+            const xAxis = d3.axisBottom().tickValues([]).tickSizeOuter(0).scale(x);
+            const yAxis = d3.axisLeft().tickValues([]).tickSizeOuter(0).scale(y);
             const xTranslate = height/2;
             const yTranslate = width/2;
             svg.append("g").attr("transform", "translate(0," +  xTranslate + ")").call(xAxis);
@@ -81,15 +81,16 @@ const Graph = (props) => {
             const xTextOffset = (height / 2) - 20;
             const yTextOffset = (width / 2) + 50;
             svg.append("text").text("Positivity")
-                .attr("x", 30)
+                .attr("x", 40)
                 .attr("y", xTextOffset)
-                .style("text-anchor", "middle");
+                .style("text-anchor", "middle")
+                .style("color", "white");
+        
             svg.append("text").text("Energy")
                 .attr("x", yTextOffset)
                 .attr("y", 20)
-                .style("text-anchor", "middle");
-            
-                svg.exit().remove();
+                .style("text-anchor", "middle")
+                .style("color", "white");
         }
         
     }, [props.data]);

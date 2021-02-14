@@ -18,17 +18,9 @@ function Analyze() {
         }
 
         const getSongData = async () => {
-            // const req = await axios.get("https://us-central1-musemood.cloudfunctions.net/GetRecentlyPlayed", {withCredentials: true})
-            // const data = await req.data;
-            const data = [
-                {x: 0.1, y: 0.2, title: "Omega"},
-                {x: 0.6, y: 0.5, title: "Omeg"},
-                {x: -0.4, y: 0.6, title: "Ome"},
-                {x: 0.25, y: 0.2, title: "Om"},
-                {x: 0.89, y: -0.7, title: "O"},
-                {x: -0.44, y: -0.2, title: "OmegaO"},
-
-            ]
+            const req = await axios.get("https://us-central1-musemood.cloudfunctions.net/GetRecentlyPlayed", {withCredentials: true})
+            const data = await req.data;
+            console.log(data);
             setSongData(data);
         }
         // const urlAddress = new URLSearchParams(props.location.search).get("code");
@@ -37,6 +29,10 @@ function Analyze() {
         getUser();
         getSongData();
     }, [])
+
+    useEffect(() => {
+
+    }, )
     const calculateNetPositivity = () => {
         let pos = 0;
 
