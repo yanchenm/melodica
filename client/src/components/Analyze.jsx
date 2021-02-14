@@ -60,7 +60,7 @@ function Analyze() {
         <div id="analysis-container">
             <h1 id="analysis-header">
                 Hi, {user}! Your average music positivity is <span className="positivity">{positivity}%</span>, and <br/> 
-                your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay!
+                your average musical energy is <span className="energy">{energy}%</span>. Hope you're doing okay {positivity < 40 ? ':(' : '!'}
             </h1>
             <div id="analysis-content-container">
                 <Graph data={songData} />
