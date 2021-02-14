@@ -79,7 +79,7 @@ func appendAttributes(attributeList AttributeList, songList *SongList) *SongList
 			}
 		}
 	}
-	return nil
+	return songList
 }
 
 func convertJSON(trackList *Tracks) *SongList {
