@@ -16,16 +16,15 @@ func main() {
 		log.Fatalf("couldn't read env: %v\n", err)
 	}
 
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/login", server.LoginHTTP); err != nil {
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/login", server.Login); err != nil {
 		log.Fatalf("/login: %v\n", err)
 	}
-	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/user", server.UserHTTP); err != nil {
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/user", server.User); err != nil {
 		log.Fatalf("/user: %v\n", err)
 	}
-    if err := funcframework.RegisterHTTPFunctionContext(ctx, "/getsongs", server.GetRecentlyPlayed); err != nil {
-        log.Fatalf("/getsongs: %v\n", err)
-    }
-
+	if err := funcframework.RegisterHTTPFunctionContext(ctx, "/getsongs", server.GetRecentlyPlayed); err != nil {
+		log.Fatalf("/getsongs: %v\n", err)
+	}
 
 	port := "8080"
 	if err := funcframework.Start(port); err != nil {
