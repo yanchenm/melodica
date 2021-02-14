@@ -4,7 +4,7 @@
 
 Melodica allows users to gain insight into how their music preferences affects their mood. 
 
-[https://melodica.tech](https://melodica.tech)
+[https://melodica.tech](https://melodica.tech) | [Devpost](https://devpost.com/software/melodica) | [Demo](https://www.youtube.com/watch?v=J27UnhGIj1s)
 
 ## Features
 
