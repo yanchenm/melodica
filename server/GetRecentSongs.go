@@ -1,11 +1,18 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"strconv"
 	"strings"
+	"time"
+
+	"cloud.google.com/go/firestore"
 
 	"github.com/yanchenm/musemoods/spotify"
 )
@@ -110,6 +117,20 @@ func convertJSON(trackList *Tracks) *SongList {
 	return &songList
 }
 
+const (
+	RecentsCollection = "recents"
+)
+
+func init() {
+	// Pre-declared to avoid shadowing client
+	var err error
+
+	fsClient, err = firestore.NewClient(context.Background(), os.Getenv("GCP_PROJECT"))
+	if err != nil {
+		log.Fatalf("firestore new client: %v\n", err)
+	}
+}
+
 func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 
 	// Preflight CORS
@@ -207,14 +228,6 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if refreshed {
-		http.SetCookie(w, &http.Cookie{
-			Name:     "access",
-			Value:    client.GetAccessToken(),
-			HttpOnly: true,
-		})
-	}
-
 	if res.StatusCode != http.StatusOK {
 		defer res.Body.Close()
 		w.WriteHeader(res.StatusCode)
@@ -229,6 +242,46 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal([]byte(serialAttributes), &attributes)
 
 	songList := appendAttributes(attributes, trackList)
+
+	// Write results to database
+	userReq, _ := http.NewRequest(http.MethodGet, "https://api.spotify.com/v1/me", nil)
+	res, refreshed, err = client.Do(userReq)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if res.StatusCode != http.StatusOK {
+		defer res.Body.Close()
+		w.WriteHeader(res.StatusCode)
+		_, _ = io.Copy(w, res.Body)
+		return
+	}
+
+	defer res.Body.Close()
+	spotifyUser := SpotifyUser{}
+	decoder := json.NewDecoder(res.Body)
+	if err = decoder.Decode(&spotifyUser); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	currTime := time.Now().Unix()
+	_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).
+		Collection(RecentsCollection).Doc(strconv.FormatInt(currTime, 10)).
+		Set(r.Context(), songList)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if refreshed {
+		http.SetCookie(w, &http.Cookie{
+			Name:     "access",
+			Value:    client.GetAccessToken(),
+			HttpOnly: true,
+		})
+	}
 
 	w.WriteHeader(http.StatusOK)
 	if err = json.NewEncoder(w).Encode(&songList); err != nil {

@@ -37,3 +37,9 @@
     background-color: var(--main-green-hover);
     transition: .3s;
 }
+
+#logo {
+    width: 400px;
+    height: auto;
+    padding-bottom: 50px;
+}
