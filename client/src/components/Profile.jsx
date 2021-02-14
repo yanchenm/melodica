@@ -5,7 +5,7 @@ const Profile = () => {
         <div>
             {/* Header idk if we have to keep */}
             <div id="header">
-                <h1>Spotify</h1>
+                <h1>Mood Muse</h1>
                 <p>Check your daily mood here.</p>
             </div>
             <div id="user-profile">

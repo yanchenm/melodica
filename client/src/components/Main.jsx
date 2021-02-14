@@ -1,8 +1,7 @@
-import React from 'react';
 import * as qs from "query-string";
 import '../styles/Main.css';
 
-function Main () {
+const Main = () => {
 
     const getQueryString = () => {
         const url = "https://accounts.spotify.com/authorize?";
@@ -21,7 +20,7 @@ function Main () {
     return (
         <div id="main-container">
             <div id="intro">
-                <p>Curious to see how your music tastes effects your mood?</p>
+                <p>Curious to see how your music tastes affects your mood?</p>
                 <p>Find out here!</p>
             </div>
             <a href={getQueryString()} id="login-button">CONNECT WITH SPOTIFY</a>

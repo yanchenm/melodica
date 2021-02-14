@@ -1,0 +1,36 @@
+:root {
+    --main-pink: #EFD2d2;
+    --main-grey: #909090;
+}
+
+#mood-container {
+    background: var(--main-pink);
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#mood-intro {
+    font-size: 60px;
+    padding-bottom: 50px;
+}
+
+#mood-prompt {
+    font-size: 30px;
+}
+
+select {
+    appearance: none;
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 30px;
+    margin: 0 10px;
+    background-color: var(--main-pink);
+}
+
+select:focus {
+    outline: none;
+}

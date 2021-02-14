@@ -1,0 +1,15 @@
+.song {
+    list-style: none;
+    display: flex;
+}
+
+.song .song-cover {
+    width: 100px;
+}
+
+.song .song-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 30px;
+}
