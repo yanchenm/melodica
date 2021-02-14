@@ -21,6 +21,9 @@ type SingleRec struct {
 	Artists []struct {
 		Name string `json:"name"`
 	} `json:"artists"`
+	URL struct {
+		SpotifyURL string `json:"spotify"`
+	} `json:"external_urls"`
 }
 
 type Album struct {
