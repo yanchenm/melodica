@@ -3,3 +3,4 @@
 */.vscode
 */.env
 server/.env.yaml
+client/yarn.lock
