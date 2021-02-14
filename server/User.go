@@ -111,34 +111,31 @@ func User(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if user has used service before
-	var userExists bool
-	_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Get(r.Context())
-	if err != nil {
-		// Find out if error is because user doesn't exist
-		s := err.Error()
-		if strings.Contains(s, "code = NotFound") {
-			userExists = false
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		userExists = true
-	}
-
-	// Create user if not exists
-	if !userExists {
-		// If user has no email on Spotify account, generate them an ID
-		if spotifyUser.Email == "" {
-			_, _, err = fsClient.Collection(UsersCollection).Add(r.Context(), spotifyUser)
-		} else {
-			_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Set(r.Context(), spotifyUser)
-		}
-
+	// Check if user has used service before. Can't be done if user has no email on Spotify account
+	userExists := false
+	if spotifyUser.Email != "" {
+		_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Get(r.Context())
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			// Find out if error is because user doesn't exist
+			s := err.Error()
+			if strings.Contains(s, "code = NotFound") {
+				userExists = false
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			userExists = true
+		}
+
+		// Create user if not exists
+		if !userExists {
+			_, err = fsClient.Collection(UsersCollection).Doc(spotifyUser.Email).Set(r.Context(), spotifyUser)
+
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 
