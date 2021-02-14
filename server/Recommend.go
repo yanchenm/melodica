@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	"github.com/yanchenm/musemoods/spotify"
 )
@@ -20,6 +21,9 @@ type SingleRec struct {
 	Artists []struct {
 		Name string `json:"name"`
 	} `json:"artists"`
+	URL struct {
+		SpotifyURL string `json:"spotify"`
+	} `json:"external_urls"`
 }
 
 type Album struct {
@@ -84,7 +88,7 @@ func GetRecommended(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	queryParams := req.URL.Query()
-	queryParams.Add("seed_genres", string(emotion[0]))
+	queryParams.Add("seed_genres", strings.Join(emotion[:], ","))
 	req.URL.RawQuery = queryParams.Encode()
 
 	res, refreshed, err := client.Do(req)
