@@ -49,22 +49,19 @@ func User(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	refreshCookie, err := r.Cookie("refresh")
+	combinedCookie, err := r.Cookie("__session")
 	if err != nil {
-		s := fmt.Sprintf("No refresh cookie: %v", err)
+		s := fmt.Sprintf("No session cookie: %v", err)
 		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
 
-	accessCookie, err := r.Cookie("access")
+	accessToken, refreshToken, err := spotify.SplitTokens(combinedCookie.Value)
 	if err != nil {
-		s := fmt.Sprintf("No access cookie: %v", err)
+		s := fmt.Sprintf("Invalid cookie: %v", err)
 		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
-
-	refreshToken := refreshCookie.Value
-	accessToken := accessCookie.Value
 
 	client := spotify.Initialize(accessToken, refreshToken)
 	req, _ := http.NewRequest("GET", "https://api.spotify.com/v1/me", nil)
@@ -76,10 +73,13 @@ func User(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if refreshed {
+		newCookie := client.GetCombinedToken()
 		http.SetCookie(w, &http.Cookie{
-			Name:     "access",
-			Value:    client.GetAccessToken(),
+			Name:     "__session",
+			Value:    newCookie,
 			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+			Secure:   true,
 		})
 	}
 

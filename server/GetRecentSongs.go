@@ -134,44 +134,24 @@ func init() {
 
 func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 
-	// Preflight CORS
-	if r.Method == http.MethodOptions {
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
-		w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-		w.Header().Set("Access-Control-Allow-Methods", "GET")
-		w.Header().Set("Access-Control-Allow-Origin", "https://melodica.tech")
-		w.Header().Set("Access-Control-Max-Age", "3600")
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	// Set CORS headers for the main request.
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-	w.Header().Set("Access-Control-Allow-Methods", "GET")
-	w.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
-	w.Header().Set("Access-Control-Allow-Origin", "https://melodica.tech")
-
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	refreshCookie, err := r.Cookie("refresh")
+	combinedCookie, err := r.Cookie("__session")
 	if err != nil {
-		s := fmt.Sprintf("No refresh cookie: %v", err)
+		s := fmt.Sprintf("No session cookie: %v", err)
 		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
 
-	accessCookie, err := r.Cookie("access")
+	accessToken, refreshToken, err := spotify.SplitTokens(combinedCookie.Value)
 	if err != nil {
-		s := fmt.Sprintf("No access cookie: %v", err)
+		s := fmt.Sprintf("Invalid cookie: %v", err)
 		http.Error(w, s, http.StatusUnauthorized)
 		return
 	}
-
-	refreshToken := refreshCookie.Value
-	accessToken := accessCookie.Value
 
 	client := spotify.Initialize(accessToken, refreshToken)
 
@@ -192,10 +172,13 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if refreshed {
+		newCookie := client.GetCombinedToken()
 		http.SetCookie(w, &http.Cookie{
-			Name:     "access",
-			Value:    client.GetAccessToken(),
+			Name:     "__session",
+			Value:    newCookie,
 			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+			Secure:   true,
 		})
 	}
 
@@ -231,6 +214,17 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if refreshed {
+		newCookie := client.GetCombinedToken()
+		http.SetCookie(w, &http.Cookie{
+			Name:     "__session",
+			Value:    newCookie,
+			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+			Secure:   true,
+		})
+	}
+
 	if res.StatusCode != http.StatusOK {
 		defer res.Body.Close()
 		w.WriteHeader(res.StatusCode)
@@ -252,6 +246,17 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if refreshed {
+		newCookie := client.GetCombinedToken()
+		http.SetCookie(w, &http.Cookie{
+			Name:     "__session",
+			Value:    newCookie,
+			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+			Secure:   true,
+		})
 	}
 
 	if res.StatusCode != http.StatusOK {
@@ -279,14 +284,6 @@ func GetRecentlyPlayed(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	}
-
-	if refreshed {
-		http.SetCookie(w, &http.Cookie{
-			Name:     "access",
-			Value:    client.GetAccessToken(),
-			HttpOnly: true,
-		})
 	}
 
 	w.WriteHeader(http.StatusOK)

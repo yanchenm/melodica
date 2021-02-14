@@ -3,6 +3,7 @@ package spotify
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -53,8 +54,25 @@ func Initialize(accessToken, refreshToken string) *Client {
 	}
 }
 
+func CombineTokens(access, refresh string) string {
+	return access + "|" + refresh
+}
+
+func SplitTokens(combined string) (string, string, error) {
+	tokens := strings.Split(combined, "|")
+	if len(tokens) != 2 {
+		return "", "", fmt.Errorf("token not in valid format")
+	}
+
+	return tokens[0], tokens[1], nil
+}
+
 func (c *Client) GetAccessToken() string {
 	return c.accessToken
+}
+
+func (c *Client) GetCombinedToken() string {
+	return CombineTokens(c.accessToken, c.refreshToken)
 }
 
 func (c *Client) Do(req *http.Request) (*http.Response, bool, error) {
